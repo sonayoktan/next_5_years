@@ -16,7 +16,8 @@ import {
   AlertTriangle,
   CheckCircle,
   Eye,
-  Sliders
+  Sliders,
+  Download
 } from 'lucide-react';
 import { SimulationResultData, UserInput } from '@/types/simulation';
 
@@ -367,10 +368,10 @@ export const SimulationResult: React.FC<SimulationResultProps> = ({
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <button
             onClick={onOpenDeepReportModal}
-            className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
+            className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
           >
-            <BookOpen className="w-4 h-4 text-amber-400" />
-            <span>24 Sayfalık Kılavuz (Önizleme)</span>
+            <Download className="w-4 h-4 text-emerald-400" />
+            <span>Ücretsiz Kılavuzu İndir (PDF)</span>
           </button>
 
           <button
