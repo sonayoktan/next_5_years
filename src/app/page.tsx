@@ -10,6 +10,7 @@ import { ShareCardModal } from '@/components/ShareCardModal';
 import { DeepReportModal } from '@/components/DeepReportModal';
 import { ApiKeyModal } from '@/components/ApiKeyModal';
 import { UserInput, SimulationResultData } from '@/types/simulation';
+import { executeSimulation } from '@/lib/simulation-service';
 import { runSimulationEngine } from '@/lib/simulation-engine';
 
 type AppState = 'hero' | 'questionnaire' | 'scanning' | 'result';
@@ -40,30 +41,12 @@ export default function Home() {
     setAppState('scanning');
 
     try {
-      // Simulate real neural network calculation time (2.5 seconds minimum for great immersion)
-      const minDelayPromise = new Promise((resolve) => setTimeout(resolve, 2500));
+      // Simulate real neural network calculation time (2 seconds for great immersion)
+      const minDelayPromise = new Promise((resolve) => setTimeout(resolve, 2000));
+      const simPromise = executeSimulation(inputToUse, customApiKey);
 
-      const apiPromise = fetch('/api/simulate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          input: inputToUse,
-          apiKey: customApiKey || undefined
-        })
-      })
-        .then((res) => (res.ok ? res.json() : null))
-        .catch(() => null);
-
-      const [, apiResponse] = await Promise.all([minDelayPromise, apiPromise]);
-
-      if (apiResponse && apiResponse.success && apiResponse.data) {
-        setSimulationData(apiResponse.data);
-      } else {
-        // Safe and guaranteed local fallback
-        const localData = runSimulationEngine(inputToUse);
-        setSimulationData(localData);
-      }
-
+      const [, resultData] = await Promise.all([minDelayPromise, simPromise]);
+      setSimulationData(resultData);
       setAppState('result');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
